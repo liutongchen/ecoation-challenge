@@ -1,0 +1,32 @@
+const path = require('path');
+const webpack = require('webpack');
+
+module.exports = {
+    entry: [
+        './src/index.jsx'
+    ],
+
+    output: {
+        filename: 'bundle.js',
+        path: path.join(__dirname, 'dist'),
+    },
+
+    resolve: {
+        extensions: ['.js', '.jsx', '.css'],
+    },
+
+    module: {
+        rules: [
+            {
+                test: /\.jsx?$/,
+                include: path.join(__dirname, 'src'),
+                loaders: ['babel-loader'],
+            },
+            {
+                test: /\.css$/,
+                include: path.join(__dirname, 'src'),
+                loaders: ['css-loader', 'style-loader']
+            },
+        ]
+    }
+};
