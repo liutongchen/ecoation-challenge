@@ -28,6 +28,15 @@ function userReducer(state = initialState, action) {
             }
         }
 
+        case types.UPDATE_NUMBER_SUCCESS: {
+            return {
+                data: {
+                    ...data,
+                    currentNumber: action.currentNumber,
+                }
+            }
+        }
+
         default: {
             return state;
         }
