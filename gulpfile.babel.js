@@ -6,7 +6,7 @@ const path = require('path');
 
 const PORT_NUMBER = 8000;
 
-gulp.task('build-dev', cb => {
+gulp.task('bundle-dev', cb => {
     webpack(webpackConfigDev, (err, stats) => {
         if (err) {
             cb(err);
@@ -16,7 +16,7 @@ gulp.task('build-dev', cb => {
     });
 });
 
-gulp.task('run-dev', () => {
+gulp.task('run-dev-server', () => {
     const webpackConfig = { ...webpackConfigDev };
 
     webpackConfig.entry = [
