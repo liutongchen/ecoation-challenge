@@ -30,8 +30,9 @@ function userReducer(state = initialState, action) {
 
         case types.UPDATE_NUMBER_SUCCESS: {
             return {
+                hasLoggedIn: state.hasLoggedIn,
                 data: {
-                    ...data,
+                    ...state.data,
                     currentNumber: action.currentNumber,
                 }
             }

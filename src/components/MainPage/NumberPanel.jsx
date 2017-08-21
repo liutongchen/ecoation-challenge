@@ -45,7 +45,13 @@ class NumberPanel extends React.Component {
 
     handleChange(event) {
         this.setState({
-            newNumber: event.target.value,
+            newNumber: _.toInteger(event.target.value),
+        });
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            newNumber: null,
         });
     }
 
@@ -54,11 +60,14 @@ class NumberPanel extends React.Component {
             <h3>Current Number:</h3>
         );
 
+        const displayedNumber = this.state.newNumber || this.props.user.currentNumber;
+
         return (
             <Panel header={title}>
-                <input value={this.props.user.currentNumber} onChange={this.handleChange} />
+
+                <input value={displayedNumber} onChange={this.handleChange} />
                 <Button bsStyle="primary" onClick={() => this.updateNumber()}>Increment</Button>
-                <Button bsStyle="primary" onClick={() => this.updateNumber(this.state.newNumber)}>Set</Button>
+                <Button bsStyle="primary" onClick={() => this.updateNumber(displayedNumber)}>Set</Button>
             </Panel>
         );
     }

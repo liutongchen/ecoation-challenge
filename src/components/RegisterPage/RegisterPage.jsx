@@ -16,7 +16,7 @@ class RegisterPage extends React.Component {
         this.state = {
             email: "",
             password: "",
-            currentNumber: "",
+            currentNumber: 0,
         };
 
         this.handleEmailChange = this.handleEmailChange.bind(this);
@@ -35,7 +35,7 @@ class RegisterPage extends React.Component {
     }
 
     handleNumberChange(event) {
-        this.setState({ currentNumber: event.target.value });
+        this.setState({ currentNumber: _.toInteger(event.target.value) });
     }
 
     handleCancel(event) {
@@ -111,7 +111,7 @@ class RegisterPage extends React.Component {
                             type="text"
                             className="form-control"
                             name="initialNumber"
-                            value={this.state.currentNumber}
+                            value={this.state.currentNumber.toString()}
                             onChange={this.handleNumberChange}
                             required />
                     </label>
