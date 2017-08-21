@@ -69,7 +69,6 @@ class RegisterPage extends React.Component {
             })
             .catch(error => {
                 this.props.actions.registerFailure(error);
-                console.log(error);
                 toastr.error("Register failed");
             });
     }

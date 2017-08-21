@@ -3,7 +3,9 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
+
 import { Panel, Button } from 'react-bootstrap';
+import {apiHost} from '../../config';
 import * as numberActions from '../../actions/numberActions';
 
 class NumberPanel extends React.Component {
@@ -75,4 +77,4 @@ const mapDispatchToProps = dispatch => ({
     actions: bindActionCreators(numberActions, dispatch),
 });
 
-export default connect(mapStateToProps)(NumberPanel);
+export default connect(mapStateToProps, mapDispatchToProps)(NumberPanel);
