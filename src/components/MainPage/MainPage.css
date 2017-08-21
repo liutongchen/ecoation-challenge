@@ -1,0 +1,28 @@
+#welcomeLogo {
+    width: 10%;
+    float: left;
+    margin: 25px;
+}
+
+.panel.panel-default {
+    width: 80%;
+    margin: auto;
+}
+
+.numInp {
+    display: block;
+    margin: auto;
+    width: 50%;
+    font-size: 78px;
+    text-align: center;
+}
+
+#numControlBtn {
+    display: block;
+    text-align: center;
+    margin: 5%;
+}
+
+#incBtn {
+    margin-right: 5%;
+}

@@ -5,21 +5,22 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 
 import { Panel, Button } from 'react-bootstrap';
-import {apiHost} from '../../config';
+import { apiHost } from '../../config';
+import '../MainPage/MainPage.css';
 import * as numberActions from '../../actions/numberActions';
 
 class NumberPanel extends React.Component {
     constructor(props) {
         super(props);
-        
+
         this.handleChange = this.handleChange.bind(this);
 
         this.state = {
-            newNumber: null,
+            number: this.props.user.currentNumber,
         };
     }
 
-    updateNumber(currentNumber="inc") {
+    updateNumber(currentNumber = "inc") {
         const payload = {
             currentNumber: currentNumber,
         };
@@ -39,19 +40,19 @@ class NumberPanel extends React.Component {
         this.props.actions.updateNumberStart();
         fetch(patchEndpoint, request)
             .then(response => response.json())
-            .then(({currentNumber}) => this.props.actions.updateNumberSuccess(currentNumber))
+            .then(({ currentNumber }) => this.props.actions.updateNumberSuccess(currentNumber))
             .catch(error => this.props.actions.updateNumberFailure(error));
     }
 
     handleChange(event) {
         this.setState({
-            newNumber: _.toInteger(event.target.value),
+            number: _.toInteger(event.target.value),
         });
     }
 
     componentWillReceiveProps(nextProps) {
         this.setState({
-            newNumber: null,
+            number: nextProps.user.currentNumber,
         });
     }
 
@@ -60,14 +61,13 @@ class NumberPanel extends React.Component {
             <h3>Current Number:</h3>
         );
 
-        const displayedNumber = this.state.newNumber || this.props.user.currentNumber;
-
         return (
             <Panel header={title}>
-
-                <input value={displayedNumber} onChange={this.handleChange} />
-                <Button bsStyle="primary" onClick={() => this.updateNumber()}>Increment</Button>
-                <Button bsStyle="primary" onClick={() => this.updateNumber(displayedNumber)}>Set</Button>
+                <input className="numInp" value={this.state.number} onChange={this.handleChange} />
+                <div id="numControlBtn">
+                    <Button bsStyle="primary" id="incBtn" onClick={() => this.updateNumber()}>Get</Button>
+                    <Button bsStyle="primary" onClick={() => this.updateNumber(this.state.number)}>Set</Button>
+                </div>
             </Panel>
         );
     }
