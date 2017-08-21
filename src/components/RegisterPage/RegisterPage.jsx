@@ -30,8 +30,8 @@ class RegisterPage extends React.Component {
         this.setState({ email: event.target.value });
     }
 
-    handlePasswordChange(event) {
-        this.setState({ password: event.target.value });
+    handlePasswordChange({ score, isValid, password }) {
+        this.setState({ password });
     }
 
     handleNumberChange(event) {
@@ -49,11 +49,13 @@ class RegisterPage extends React.Component {
             password: this.state.password,
         };
 
-        const data = new FormData();
-        data.append("json", JSON.stringify(payload));
         const request = {
             method: "POST",
-            body: data,
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload),
         };
 
         const registerEndpoint = apiHost + '/api/users';
@@ -61,10 +63,12 @@ class RegisterPage extends React.Component {
         fetch(registerEndpoint, request)
             .then(response => response.json())
             .then(user => {
-                this.props.actions.registerSucess(user);
+                this.props.actions.registerSuccess(user);
+                this.props.history.push('/');
             })
             .catch(error => {
                 this.props.actions.registerFailure(error);
+                console.log(error);
                 toastr.error("Register failed");
             });
     }
@@ -92,7 +96,13 @@ class RegisterPage extends React.Component {
                             minLength={5}
                             minScore={2}
                             scoreWords={['weak', 'okay', 'good', 'strong', 'stronger']}
-                            inputProps={{ name: "password_input", autoComplete: "off", className: "form-control" }}
+                            changeCallback={this.handlePasswordChange}
+                            inputProps={{
+                                value: this.state.password,
+                                name: "password_input",
+                                autoComplete: "off",
+                                className: "form-control"
+                            }}
                         />
                     </label>
                     <label>

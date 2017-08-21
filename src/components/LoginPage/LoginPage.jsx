@@ -4,7 +4,6 @@ import toastr from 'toastr';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import path from 'path';
-
 import './LoginPage.css';
 import { apiHost } from '../../config';
 import * as loginActions from '../../actions/loginActions';
@@ -43,12 +42,14 @@ class LoginPage extends React.Component {
             email: this.state.email,
             password: this.state.password,
         }
-        const data = new FormData();
-        data.append("json", JSON.stringify(payload));
 
         const request = {
             method: "POST",
-            body: data,
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload),
         };
 
         const loginEndpoint = apiHost + '/api/login';

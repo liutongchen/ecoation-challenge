@@ -51836,7 +51836,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 var App = function App() {
     return React.createElement(
-        _reactRouterDom.BrowserRouter,
+        _reactRouterDom.HashRouter,
         null,
         React.createElement(
             'div',
@@ -65538,12 +65538,14 @@ var LoginPage = function (_React$Component) {
                 email: this.state.email,
                 password: this.state.password
             };
-            var data = new FormData();
-            data.append("json", JSON.stringify(payload));
 
             var request = {
                 method: "POST",
-                body: data
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
             };
 
             var loginEndpoint = _config.apiHost + '/api/login';
@@ -76353,8 +76355,12 @@ var RegisterPage = function (_React$Component) {
         }
     }, {
         key: 'handlePasswordChange',
-        value: function handlePasswordChange(event) {
-            this.setState({ password: event.target.value });
+        value: function handlePasswordChange(_ref) {
+            var score = _ref.score,
+                isValid = _ref.isValid,
+                password = _ref.password;
+
+            this.setState({ password: password });
         }
     }, {
         key: 'handleNumberChange',
@@ -76377,11 +76383,13 @@ var RegisterPage = function (_React$Component) {
                 password: this.state.password
             };
 
-            var data = new FormData();
-            data.append("json", JSON.stringify(payload));
             var request = {
                 method: "POST",
-                body: data
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
             };
 
             var registerEndpoint = _config.apiHost + '/api/users';
@@ -76389,9 +76397,11 @@ var RegisterPage = function (_React$Component) {
             fetch(registerEndpoint, request).then(function (response) {
                 return response.json();
             }).then(function (user) {
-                _this2.props.actions.registerSucess(user);
+                _this2.props.actions.registerSuccess(user);
+                _this2.props.history.push('/');
             }).catch(function (error) {
                 _this2.props.actions.registerFailure(error);
+                console.log(error);
                 _toastr2.default.error("Register failed");
             });
         }
@@ -76433,7 +76443,13 @@ var RegisterPage = function (_React$Component) {
                             minLength: 5,
                             minScore: 2,
                             scoreWords: ['weak', 'okay', 'good', 'strong', 'stronger'],
-                            inputProps: { name: "password_input", autoComplete: "off", className: "form-control" }
+                            changeCallback: this.handlePasswordChange,
+                            inputProps: {
+                                value: this.state.password,
+                                name: "password_input",
+                                autoComplete: "off",
+                                className: "form-control"
+                            }
                         })
                     ),
                     _react2.default.createElement(
