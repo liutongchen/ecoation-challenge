@@ -47,6 +47,7 @@ class RegisterPage extends React.Component {
         const payload = {
             email: this.state.email,
             password: this.state.password,
+            currentNumber: this.state.currentNumber,
         };
 
         const request = {
@@ -111,7 +112,6 @@ class RegisterPage extends React.Component {
                             type="text"
                             className="form-control"
                             name="initialNumber"
-                            placeholder="0"
                             value={this.state.currentNumber}
                             onChange={this.handleNumberChange}
                             required />

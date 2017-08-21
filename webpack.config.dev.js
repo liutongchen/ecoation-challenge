@@ -28,5 +28,11 @@ module.exports = {
                 loaders: ['style-loader', 'css-loader']
             },
         ]
-    }
+    },
+    
+    externals: {
+        "react": "React",
+        "react-dom": "ReactDOM",
+        "redux": "Redux",
+    },
 };
