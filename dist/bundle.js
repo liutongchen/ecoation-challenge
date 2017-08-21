@@ -76517,7 +76517,6 @@ var RegisterPage = function (_React$Component) {
     }, {
         key: 'handleNumberChange',
         value: function handleNumberChange(event) {
-            console.log(event.target.value);
             this.setState({ currentNumber: event.target.value });
         }
     }, {
