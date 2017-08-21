@@ -13,6 +13,7 @@ body {
     margin: 0 auto;
     background-color: #fff;
     border: 1px solid rgba(0, 0, 0, 0.1);
+    position: relative;
 }
 
 .form-register .form-register-heading, 
@@ -46,3 +47,17 @@ body {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
 }
+
+.form-register label {
+    width: 100%;
+}
+
+.ReactPasswordStrength-strength-desc {
+    display: none;
+}
+
+.password .ReactPasswordStrength-input.form-control {
+    margin: 0;
+    width: 100%;
+}
+
