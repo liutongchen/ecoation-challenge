@@ -1,15 +1,15 @@
 import * as types from './actionTypes'
 
 export const registerStart = () => ({
-    type: types.LOGIN_START,
+    type: types.REGISTER_START,
 });
 
 export const registerSuccess = user => ({
-    type: types.LOGIN_SUCCESS,
+    type: types.REGISTER_SUCCESS,
     user: user
 });
 
 export const registerFailure = () => ({
-    type: types.LOGIN_FAILURE,
+    type: types.REGISTER_FAILURE,
 });
 

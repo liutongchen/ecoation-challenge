@@ -2,9 +2,20 @@ const gulp = require('gulp');
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
 const webpackConfigDev = require('./webpack.config.dev');
+const webpackConfigProd = require('./webpack.config.prod');
 const path = require('path');
 
-const PORT_NUMBER = 8000;
+const PORT_NUMBER = process.env.PORT_NUMBER || 8000;
+
+gulp.task('bundle', cb => {
+    webpack(webpackConfigProd, (err, stats) => {
+        if (err) {
+            cb(err);
+        } else {
+            cb();
+        }
+    });
+});
 
 gulp.task('bundle-dev', cb => {
     webpack(webpackConfigDev, (err, stats) => {

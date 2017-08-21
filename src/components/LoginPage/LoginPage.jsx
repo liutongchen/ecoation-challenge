@@ -1,7 +1,12 @@
 import React from 'react';
-import './LoginPage.css';
+import PropTypes from 'prop-types';
+import toastr from 'toastr';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import path from 'path';
+
+import './LoginPage.css';
+import { apiHost } from '../../config';
 import * as loginActions from '../../actions/loginActions';
 
 class LoginPage extends React.Component {
@@ -33,16 +38,30 @@ class LoginPage extends React.Component {
 
     handleLogin(event) {
         this.props.actions.loginStart();
-        const email = this.state.email;
-        const password = this.state.password;
 
-        fetch('https://iiaas-server.herokuapp.com/api/login')
+        const payload = {
+            email: this.state.email,
+            password: this.state.password,
+        }
+        const data = new FormData();
+        data.append("json", JSON.stringify(payload));
+
+        const request = {
+            method: "POST",
+            body: data,
+        };
+
+        const loginEndpoint = apiHost + '/api/login';
+
+        fetch(loginEndpoint, request)
             .then(response => response.json())
-            .then(() => {
-                this.props.actions.loginSuccess();
+            .then(user => {
+                this.props.actions.loginSuccess(user);
+                this.props.history.push('/');
             })
             .catch(() => {
                 this.props.actions.loginFailure();
+                toastr.error("Please check your email and password!")
             });
     }
 
@@ -71,6 +90,7 @@ class LoginPage extends React.Component {
                         id="loginBtn"
                         className="btn btn-lg btn-primary btn-block"
                         type="submit"
+                        disabled={!this.props.loginButtonEnabled}
                         onClick={this.handleLogin}>
                         Login
                     </button>
@@ -86,8 +106,17 @@ class LoginPage extends React.Component {
     }
 }
 
-const mapDispatchToProps = (dispatch) => ({
+LoginPage.propTypes = {
+    actions: PropTypes.object.isRequired,
+    loginButtonEnabled: PropTypes.bool.isRequired,
+};
+
+const mapDispatchToProps = dispatch => ({
     actions: bindActionCreators(loginActions, dispatch),
 });
 
-export default connect(()=>({}), mapDispatchToProps)(LoginPage);
+const mapStateToProps = state => ({
+    loginButtonEnabled: state.ui.loginButtonEnabled,
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginPage);

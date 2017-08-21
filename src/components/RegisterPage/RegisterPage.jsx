@@ -1,9 +1,13 @@
 import React from 'react';
-import './RegisterPage.css';
-import ReactPasswordStrength from 'react-password-strength';
-import * as registerActions from '../../actions/registerActions';
+import PropTypes from 'prop-types';
+import toastr from 'toastr';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import ReactPasswordStrength from 'react-password-strength';
+
+import { apiHost } from '../../config';
+import './RegisterPage.css';
+import * as registerActions from '../../actions/registerActions';
 
 class RegisterPage extends React.Component {
     constructor(props) {
@@ -38,7 +42,7 @@ class RegisterPage extends React.Component {
         this.props.history.push("/");
     }
 
-    handleRegister() {
+    handleRegister(event) {
         this.props.actions.registerStart();
         const payload = {
             email: this.state.email,
@@ -49,17 +53,19 @@ class RegisterPage extends React.Component {
         data.append("json", JSON.stringify(payload));
         const request = {
             method: "POST",
-            mode: "cors",
             body: data,
         };
 
-        fetch('https://iiaas-server.herokuapp.com/api/users', request)
+        const registerEndpoint = apiHost + '/api/users';
+
+        fetch(registerEndpoint, request)
             .then(response => response.json())
             .then(user => {
                 this.props.actions.registerSucess(user);
             })
             .catch(error => {
                 this.props.actions.registerFailure(error);
+                toastr.error("Register failed");
             });
     }
 
@@ -76,7 +82,8 @@ class RegisterPage extends React.Component {
                             name="username"
                             placeholder="Email Address"
                             value={this.state.email}
-                            onChange={this.handleEmailChange} />
+                            onChange={this.handleEmailChange}
+                            required />
                     </label>
                     <label className="password">
                         Password:
@@ -96,12 +103,14 @@ class RegisterPage extends React.Component {
                             name="initialNumber"
                             placeholder="0"
                             value={this.state.currentNumber}
-                            onChange={this.handleNumberChange} />
+                            onChange={this.handleNumberChange}
+                            required />
                     </label>
                     <button
                         id="registerBtn"
                         className="btn btn-lg btn-primary btn-block"
                         type="submit"
+                        disabled={!this.props.registerButtonEnabled}
                         onClick={this.handleRegister}>
                         Register
                     </button>
@@ -118,8 +127,17 @@ class RegisterPage extends React.Component {
     }
 }
 
-const mapDispatchToProps = (dispatch) => (
-    { actions: bindActionCreators(registerActions, dispatch) }
-)
+const mapDispatchToProps = dispatch => ({
+    actions: bindActionCreators(registerActions, dispatch)
+});
 
-export default connect(() => ({}), mapDispatchToProps)(RegisterPage);
+RegisterPage.propTypes = {
+    actions: PropTypes.object.isRequired,
+    registerButtonEnabled: PropTypes.bool.isRequired,
+};
+
+const mapStateToProps = state => ({
+    registerButtonEnabled: state.ui.registerButtonEnabled,
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(RegisterPage);
