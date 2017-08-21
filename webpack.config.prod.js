@@ -37,10 +37,10 @@ module.exports = {
             },
         ]
     },
-    
-    externals: {
-        "react": "React",
-        "react-dom": "ReactDOM",
-        "redux": "Redux",
+
+     externals: {
+        "react": true,
+        "react-dom": true,
+        "redux": true,
     },
 };
