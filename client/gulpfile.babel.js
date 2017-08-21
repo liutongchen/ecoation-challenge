@@ -23,7 +23,7 @@ gulp.task('run-dev', () => {
         `webpack-dev-server/client?http://localhost:${PORT_NUMBER}`,
         ...webpackConfig.entry,
     ];
-    
+
     webpackConfig.devServer = {
         inline: true,
     };
@@ -34,6 +34,7 @@ gulp.task('run-dev', () => {
         inline: true,
         contentBase: path.join(__dirname, 'dist'),
         port: PORT_NUMBER,
+        historyApiFallback: true,
     };
 
     new WebpackDevServer(bundler, devServerConfig).listen(PORT_NUMBER, 'localhost');
