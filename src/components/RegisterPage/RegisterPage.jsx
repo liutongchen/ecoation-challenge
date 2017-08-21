@@ -40,15 +40,17 @@ class RegisterPage extends React.Component {
 
     handleRegister() {
         this.props.actions.registerStart();
-        const email = this.state.email;
-        const password = this.state.password;
+        const payload = {
+            email: this.state.email,
+            password: this.state.password,
+        };
+
+        const data = new FormData();
+        data.append("json", JSON.stringify(payload));
         const request = {
             method: "POST",
             mode: "cors",
-            body: {
-                email,
-                password
-            }
+            body: data,
         };
 
         fetch('https://iiaas-server.herokuapp.com/api/users', request)
@@ -97,6 +99,7 @@ class RegisterPage extends React.Component {
                             onChange={this.handleNumberChange} />
                     </label>
                     <button
+                        id="registerBtn"
                         className="btn btn-lg btn-primary btn-block"
                         type="submit"
                         onClick={this.handleRegister}>

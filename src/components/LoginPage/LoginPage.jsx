@@ -36,14 +36,8 @@ class LoginPage extends React.Component {
         const email = this.state.email;
         const password = this.state.password;
 
-        fetch('https://iiaas-server.herokuapp.com/api/users')
-            .then(users.forEach(
-                user => {
-                    if (email === user.email) {
-                        return password === user.password;
-                    }
-                }
-            ))
+        fetch('https://iiaas-server.herokuapp.com/api/login')
+            .then(response => response.json())
             .then(() => {
                 this.props.actions.loginSuccess();
             })
@@ -74,6 +68,7 @@ class LoginPage extends React.Component {
                         onChange={this.handlePasswordChange} />
 
                     <button
+                        id="loginBtn"
                         className="btn btn-lg btn-primary btn-block"
                         type="submit"
                         onClick={this.handleLogin}>
