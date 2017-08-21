@@ -1,6 +1,8 @@
 import React from 'react';
 import './LoginPage.css';
-import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as loginActions from '../../actions/loginActions';
 
 class LoginPage extends React.Component {
     constructor(props) {
@@ -30,7 +32,24 @@ class LoginPage extends React.Component {
     }
 
     handleLogin(event) {
-        
+        this.props.actions.loginStart();
+        const email = this.state.email;
+        const password = this.state.password;
+
+        fetch('https://iiaas-server.herokuapp.com/api/users')
+            .then(users.forEach(
+                user => {
+                    if (email === user.email) {
+                        return password === user.password;
+                    }
+                }
+            ))
+            .then(() => {
+                this.props.actions.loginSuccess();
+            })
+            .catch(() => {
+                this.props.actions.loginFailure();
+            });
     }
 
     render() {
@@ -54,10 +73,10 @@ class LoginPage extends React.Component {
                         value={this.state.password}
                         onChange={this.handlePasswordChange} />
 
-                    <button 
-                        className="btn btn-lg btn-primary btn-block" 
+                    <button
+                        className="btn btn-lg btn-primary btn-block"
                         type="submit"
-                        onClick={handleLogin}>
+                        onClick={this.handleLogin}>
                         Login
                     </button>
                     <button
@@ -72,4 +91,8 @@ class LoginPage extends React.Component {
     }
 }
 
-export default withRouter(LoginPage);
+const mapDispatchToProps = (dispatch) => ({
+    actions: bindActionCreators(loginActions, dispatch),
+});
+
+export default connect(()=>({}), mapDispatchToProps)(LoginPage);

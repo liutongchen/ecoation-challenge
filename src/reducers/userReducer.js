@@ -1,4 +1,4 @@
-import { LOGIN_START, LOGIN_SUCCESS, LOGIN_FAILURE, LOGOUT } from '../actions/loginActions';
+import * as types from '../actions/actionTypes';
 
 const initialState = {
     hasLoggedIn: false,
@@ -7,20 +7,26 @@ const initialState = {
 
 function userReducer(state = initialState, action) {
     switch (action.type) {
-        case LOGIN_SUCCESS: {
+        case types.LOGIN_SUCCESS: {
             return {
                 hasLoggedIn: true,
                 data: action.user,
             };
         }
 
-        case LOGOUT: {
+        case types.LOGOUT: {
             return {
                 hasLoggedIn: false,
                 data: null,
             };
         }
 
+        case types.REGISTER_SUCCESS: {
+            return {
+                hasLoggedIn: true,
+                data: action.user,
+            }
+        }
         default: {
             return state;
         }

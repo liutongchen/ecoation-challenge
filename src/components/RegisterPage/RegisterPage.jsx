@@ -1,7 +1,9 @@
 import React from 'react';
 import './RegisterPage.css';
 import ReactPasswordStrength from 'react-password-strength';
-import { withRouter } from 'react-router-dom';
+import * as registerActions from '../../actions/registerActions';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 class RegisterPage extends React.Component {
     constructor(props) {
@@ -17,6 +19,7 @@ class RegisterPage extends React.Component {
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
         this.handleNumberChange = this.handleNumberChange.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
+        this.handleRegister = this.handleRegister.bind(this);
     }
 
     handleEmailChange(event) {
@@ -33,6 +36,29 @@ class RegisterPage extends React.Component {
 
     handleCancel(event) {
         this.props.history.push("/");
+    }
+
+    handleRegister() {
+        this.props.actions.registerStart();
+        const email = this.state.email;
+        const password = this.state.password;
+        const request = {
+            method: "POST",
+            mode: "cors",
+            body: {
+                email,
+                password
+            }
+        };
+
+        fetch('https://iiaas-server.herokuapp.com/api/users', request)
+            .then(response => response.json())
+            .then(user => {
+                this.props.actions.registerSucess(user);
+            })
+            .catch(error => {
+                this.props.actions.registerFailure(error);
+            });
     }
 
     render() {
@@ -70,7 +96,10 @@ class RegisterPage extends React.Component {
                             value={this.state.currentNumber}
                             onChange={this.handleNumberChange} />
                     </label>
-                    <button className="btn btn-lg btn-primary btn-block" type="submit">
+                    <button
+                        className="btn btn-lg btn-primary btn-block"
+                        type="submit"
+                        onClick={this.handleRegister}>
                         Register
                     </button>
                     <button
@@ -86,4 +115,8 @@ class RegisterPage extends React.Component {
     }
 }
 
-export default withRouter(RegisterPage);
+const mapDispatchToProps = (dispatch) => (
+    { actions: bindActionCreators(registerActions, dispatch) }
+)
+
+export default connect(() => ({}), mapDispatchToProps)(RegisterPage);
